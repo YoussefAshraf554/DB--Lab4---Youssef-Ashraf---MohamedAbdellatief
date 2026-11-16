@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-card">
+    <h2>Add category</h2>
+    <form method="POST" novalidate>
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" value="{{ category.name }}" class="{{ 'invalid' if errors.name }}">
+        <span class="error">{{ errors.name }}</span>
+
+        <div class="form-actions">
+            <button type="submit">Add category</button>
+            <a class="btn ghost-link" href="{{ back }}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

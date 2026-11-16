@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "macros.html" import data_table %}
+{% block content %}
+<div class="section-head"><h2>Most borrowed</h2></div>
+
+<h3 class="sub">The 3 books with the most loans</h3>
+{{ data_table(['Book', 'Loans'], ['title', 'loans'], top_books, 'No loans yet.') }}
+
+<h3 class="sub">The member with the most loans</h3>
+{{ data_table(['Member', 'Loans'], ['name', 'loans'], top_member, 'No loans yet.') }}
+{% endblock %}

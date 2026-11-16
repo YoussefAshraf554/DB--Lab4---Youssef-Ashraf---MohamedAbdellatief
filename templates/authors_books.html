@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "macros.html" import data_table %}
+{% block content %}
+<div class="section-head"><h2>Authors and books</h2></div>
+
+<h3 class="sub">Number of books of each author (including 0)</h3>
+{{ data_table(['Author', 'Country', 'Books'], ['author', 'country', 'books'], counts, 'No authors yet.') }}
+
+<h3 class="sub">Books whose author and publisher are from the same country</h3>
+{{ data_table(['Book', 'Author', 'Publisher', 'Country'], ['title', 'author', 'publisher', 'country'],
+              same_country, 'No book matches.') }}
+{% endblock %}

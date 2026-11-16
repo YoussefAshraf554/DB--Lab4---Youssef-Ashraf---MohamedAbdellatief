@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "macros.html" import data_table %}
+{% block content %}
+<div class="section-head"><h2>Search books</h2></div>
+<form class="filters" id="searchForm" method="GET" action="{{ url_for('search') }}" novalidate>
+    <div>
+        <label for="q">Title contains</label>
+        <input id="q" name="q" type="text" value="{{ form.q }}" placeholder="e.g. murder">
+    </div>
+    <div>
+        <label for="min_price">Min price</label>
+        <input id="min_price" name="min_price" type="text" value="{{ form.min_price }}" class="{{ 'invalid' if errors.min_price }}">
+        <span class="error">{{ errors.min_price }}</span>
+    </div>
+    <div>
+        <label for="max_price">Max price</label>
+        <input id="max_price" name="max_price" type="text" value="{{ form.max_price }}" class="{{ 'invalid' if errors.max_price }}">
+        <span class="error">{{ errors.max_price }}</span>
+    </div>
+    <div>
+        <label for="category">Category</label>
+        <select id="category" name="category" class="{{ 'invalid' if errors.category }}">
+            <option value="">All categories</option>
+            {% for c in categories %}
+            <option value="{{ c.category_id }}" {{ 'selected' if form.category == c.category_id|string }}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <span class="error">{{ errors.category }}</span>
+    </div>
+    <div class="filters-go"><button type="submit">Search</button></div>
+</form>
+<div id="results">
+{% if errors %}
+<div class="alert">{{ errors.values()|join(' · ') }}</div>
+{% else %}
+<p class="muted">{{ results|length }} book{{ '' if results|length == 1 else 's' }} found, cheapest first.</p>
+{{ data_table(['ID', 'Title', 'Price', 'Year', 'Author', 'Category'],
+            ['book_id', 'title', 'price', 'publish_year', 'author', 'category'],
+            results, 'No book matches your search.') }}
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "macros.html" import data_table %}
+{% block content %}
+<div class="section-head"><h2>Reports</h2></div>
+
+<h3 class="sub">Books and average price of each category</h3>
+{{ data_table(['Category', 'Books', 'Average price'], ['category', 'books', 'average_price'], per_category) }}
+
+<h3 class="sub">Authors who wrote at least 2 books</h3>
+{{ data_table(['Author', 'Books'], ['author', 'books'], prolific, 'No author has 2 books yet.') }}
+
+<h3 class="sub">The whole library</h3>
+<div class="stats">
+    <div class="stat"><span>Total price</span><strong>{{ totals.total_price or '-' }}</strong></div>
+    <div class="stat"><span>Smallest price</span><strong>{{ totals.smallest_price or '-' }}</strong></div>
+    <div class="stat"><span>Largest price</span><strong>{{ totals.largest_price or '-' }}</strong></div>
+</div>
+{% endblock %}

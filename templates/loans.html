@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "macros.html" import data_table %}
+{% block content %}
+<div class="section-head"><h2>Loans</h2></div>
+
+<h3 class="sub">Loans not returned yet</h3>
+{% if not_returned %}
+<div class="table-wrap">
+<table>
+    <thead><tr><th>Loan</th><th>Book</th><th>Member</th><th>Loan date</th><th></th></tr></thead>
+    <tbody>
+    {% for r in not_returned %}
+    <tr>
+        <td>{{ r.loan_id }}</td><td>{{ r.book }}</td><td>{{ r.member }}</td><td>{{ r.loan_date }}</td>
+        <td>{% if r.member_id == my_member_id %}<div class="actions"><form method="POST" action="{{ url_for('return_loan', loan_id=r.loan_id) }}"><button class="small" type="submit">Return</button></form></div>{% endif %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">Every book has been returned.</p>
+{% endif %}
+
+<h3 class="sub">Members who never borrowed a book</h3>
+{{ data_table(['ID', 'Name', 'Email'], ['member_id', 'name', 'email'], idle_members, 'Every member has borrowed a book.') }}
+
+<h3 class="sub">Books that were never borrowed</h3>
+{{ data_table(['ID', 'Title'], ['book_id', 'title'], idle_books, 'Every book has been borrowed.') }}
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-card">
+    <h2>{{ 'Edit book' if editing else 'Add book' }}</h2>
+    {% if not authors %}
+        <div class="alert">There are no authors yet. <a href="{{ url_for('author_form') }}">Add an author</a> first.</div>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data" novalidate>
+        <label for="title">Title</label>
+        <input id="title" name="title" type="text" value="{{ book.title }}" class="{{ 'invalid' if errors.title }}">
+        <span class="error">{{ errors.title }}</span>
+
+        <label for="price">Price</label>
+        <input id="price" name="price" type="text" value="{{ book.price }}" class="{{ 'invalid' if errors.price }}">
+        <span class="error">{{ errors.price }}</span>
+
+        <label for="publish_year">Publish year</label>
+        <input id="publish_year" name="publish_year" type="text" value="{{ book.publish_year }}" class="{{ 'invalid' if errors.publish_year }}">
+        <span class="error">{{ errors.publish_year }}</span>
+
+        <label for="author_id">Author</label>
+        <select id="author_id" name="author_id" data-new-url="{{ url_for('author_form', next='book') }}" class="{{ 'invalid' if errors.author_id }}">
+            <option value="">-- choose an author --</option>
+            {% for a in authors %}
+            <option value="{{ a.author_id }}" {{ 'selected' if book.author_id|string == a.author_id|string }}>{{ a.author_id }} - {{ a.name }}</option>
+            {% endfor %}
+            <option value="__new__">+ Add a new author...</option>
+        </select>
+        <span class="error">{{ errors.author_id }}</span>
+
+        <label for="publisher_id">Publisher</label>
+        <select id="publisher_id" name="publisher_id" data-new-url="{{ url_for('publisher_form', next='book') }}" class="{{ 'invalid' if errors.publisher_id }}">
+            <option value="">-- choose a publisher --</option>
+            {% for p in publishers %}
+            <option value="{{ p.publisher_id }}" {{ 'selected' if book.publisher_id|string == p.publisher_id|string }}>{{ p.name }}</option>
+            {% endfor %}
+            <option value="__new__">+ Add a new publisher...</option>
+        </select>
+        <span class="error">{{ errors.publisher_id }}</span>
+
+        <label for="category_id">Category</label>
+        <select id="category_id" name="category_id" data-new-url="{{ url_for('category_form', next='book') }}" class="{{ 'invalid' if errors.category_id }}">
+            <option value="">-- choose a category --</option>
+            {% for c in categories %}
+            <option value="{{ c.category_id }}" {{ 'selected' if book.category_id|string == c.category_id|string }}>{{ c.name }}</option>
+            {% endfor %}
+            <option value="__new__">+ Add a new category...</option>
+        </select>
+        <span class="error">{{ errors.category_id }}</span>
+
+        <label for="cover">Cover image (optional)</label>
+        {% if book.cover %}
+        <div class="cover-preview" id="coverPreview" {{ 'hidden' if remove_cover }}>
+            <img class="thumb big" src="{{ url_for('static', filename='uploads/' ~ book.cover) }}" alt="">
+            <button type="button" class="cover-remove" id="removeCover" title="Remove image" aria-label="Remove image">&times;</button>
+        </div>
+        <input type="hidden" name="remove_cover" id="removeCoverInput" value="{{ '1' if remove_cover }}">
+        {% endif %}
+        <input id="cover" name="cover" type="file" accept="image/*" class="{{ 'invalid' if errors.cover }}">
+        <span class="error">{{ errors.cover }}</span>
+
+        <div class="form-actions">
+            <button type="submit">{{ 'Save changes' if editing else 'Add book' }}</button>
+            <a class="btn ghost-link" href="{{ url_for('books') }}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
